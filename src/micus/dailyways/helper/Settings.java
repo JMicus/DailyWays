@@ -10,7 +10,8 @@ public class Settings {
 	public static int WIDTH, HEIGHT,
 					MAX_ZOOM, MIN_ZOOM, ZOOMSLIDER_MARGIN, ZOOMSLIDER_POSX, ZOOMSLIDER_SIZE,
 					ZOOMSLIDER_ID, PAN_ID, CAR_ID,
-					START_ZOOM;
+					START_ZOOM,
+					PORT;
 	
 	public static double START_COORD_LAT, START_COORD_LON;
 	
@@ -55,6 +56,7 @@ public class Settings {
                 START_COORD_LAT = Double.parseDouble(prop.get("start_coordinates_lat").toString());
                 START_COORD_LON = Double.parseDouble(prop.get("start_coordinates_lon").toString());
                 
+                PORT = Integer.parseInt(prop.get("port").toString());
                 ZOOMSLIDER_ID = Integer.parseInt(prop.get("zoomslider_id").toString());
                 PAN_ID = Integer.parseInt(prop.get("pan_id").toString());
                 CAR_ID = Integer.parseInt(prop.get("car_id").toString());

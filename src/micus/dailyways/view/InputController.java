@@ -31,7 +31,7 @@ public class InputController implements TuioListener {
 		//this.overlay = overlay;
 		this.model = model;
 		
-		TuioClient client = new TuioClient();
+		TuioClient client = new TuioClient(Settings.PORT);
 		client.addTuioListener(this);
 		client.connect();
 	}
