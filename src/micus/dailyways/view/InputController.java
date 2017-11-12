@@ -6,10 +6,16 @@ import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 
+import TUIO.TuioBlob;
+import TUIO.TuioClient;
+import TUIO.TuioCursor;
+import TUIO.TuioListener;
+import TUIO.TuioObject;
+import TUIO.TuioTime;
 import micus.dailyways.helper.Settings;
 import micus.dailyways.main.Model;
 
-public class InputController {
+public class InputController implements TuioListener {
 	
 	//private MainFrame frame;
 	//private JMapViewer map;
@@ -24,10 +30,18 @@ public class InputController {
 		//this.map = map;
 		//this.overlay = overlay;
 		this.model = model;
+		
+		TuioClient client = new TuioClient();
+		client.addTuioListener(this);
+		client.connect();
 	}
 
 	
-	public void fiducialAdded(int fID, float x, float y) {
+	@Override
+	public void addTuioObject(TuioObject to) {
+		int fID = to.getSymbolID();
+		float x = to.getX();
+		float y = to.getY();
 		System.out.println("added: "+fID+" at "+x+":"+y);
 		
 		//Point mapPoint = new Point((int)x,(int)y);
@@ -36,7 +50,7 @@ public class InputController {
 		model.showFiducial(fID, mapPoint);
 		
 		if (fID == Settings.ZOOMSLIDER_ID) {
-			model.getMap().setZoom(zoomLevel(y));
+			model.getMap().setZoom(zoomLevel(mapPoint.y));
 		}
 		else if (fID == Settings.PAN_ID) {
 			panMapPoint = mapPoint;
@@ -47,9 +61,15 @@ public class InputController {
 		else if (fID == Settings.CAR_ID) {
 			model.addVehicle(model.getMap().getPosition(mapPoint));
 		}
+		
+		repaint();
 	}
 	
-	public void fiducialUpdated(int fID, float x, float y) {
+	@Override
+	public void updateTuioObject(TuioObject to) {
+		int fID = to.getSymbolID();
+		float x = to.getX();
+		float y = to.getY();
 		System.out.println("updated: "+fID+" at "+x+":"+y);
 		
 		//Point mapPoint = new Point((int)x,(int)y);
@@ -59,7 +79,7 @@ public class InputController {
 		
 		if (fID == Settings.ZOOMSLIDER_ID) {
 			int zoomOld = model.getMap().getZoom();
-			int zoomNew = zoomLevel(y);
+			int zoomNew = zoomLevel(mapPoint.y);
 			model.getMap().setZoom(zoomNew);
 			if (panMapPoint!=null) panCoord = model.getMap().getPosition(panMapPoint);
 			if (zoomOld==zoomNew) repaint(); // otherwise it is repainted already
@@ -71,9 +91,15 @@ public class InputController {
 		else if (fID == Settings.CAR_ID) {
 			model.updateVehicle(model.getMap().getPosition(mapPoint));
 		}
+		
+		repaint();
 	}
 	
-	public void fiducialEnded(int fID, float x, float y) {
+	@Override
+	public void removeTuioObject(TuioObject to) {
+		int fID = to.getSymbolID();
+		float x = to.getX();
+		float y = to.getY();
 		System.out.println("ended: "+fID+" at "+x+":"+y);
 		
 		model.showFiducial(fID, null);
@@ -101,13 +127,69 @@ public class InputController {
 
 
 	public void repaint() {
-		model.getMap().repaint();
+		model.paint();
 	}
 	
 	
 	private Point changeInput(float x, float y) {
-		Point p = new Point((int)-y,(int)-x);
+		x *= Settings.WIDTH;
+		y *= Settings.HEIGHT;
+		//Point p = new Point((int)-y,(int)-x);
+		Point p = new Point((int)x,(int)y);
 		return p;
 	}
+
+
+	@Override
+	public void addTuioBlob(TuioBlob arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void addTuioCursor(TuioCursor arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+
+	@Override
+	public void refresh(TuioTime arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void removeTuioBlob(TuioBlob arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void removeTuioCursor(TuioCursor arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void updateTuioBlob(TuioBlob arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void updateTuioCursor(TuioCursor arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 
 }

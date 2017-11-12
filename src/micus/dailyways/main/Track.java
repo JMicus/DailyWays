@@ -18,6 +18,7 @@ import org.openstreetmap.gui.jmapviewer.MapObjectImpl;
 import org.openstreetmap.gui.jmapviewer.Style;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapObject;
 
+
 public class Track {
 	
 	/*private class Marker {

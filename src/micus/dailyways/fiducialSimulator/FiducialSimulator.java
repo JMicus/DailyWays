@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import TUIO.TuioObject;
 import micus.dailyways.helper.Settings;
 import micus.dailyways.view.InputController;
 
@@ -96,11 +97,12 @@ public class FiducialSimulator implements MouseListener, MouseMotionListener, Ke
 		//System.out.println("(FiducialSimulator.mouseMoved) "+fid);
 		if (fid!=null) {
 			fid.pos = me.getPoint();
-			System.out.println("(FiducialSimulator.mouseMoved) "+fid.getId()+fid.pos.x+fid.pos.y);
-			if (fid.onTable) controller.fiducialUpdated(fid.getId(), fid.pos.x, fid.pos.y);
+			//System.out.println("(FiducialSimulator.mouseMoved) "+fid.getId()+fid.pos.x+fid.pos.y);
+			if (fid.onTable) controller.updateTuioObject(createTuioObject(fid.getId(), fid.pos.x, fid.pos.y));
 			else controller.repaint(); // repaint
 		}
 	}
+	
 
 	@Override
 	public void mouseClicked(MouseEvent me) {
@@ -140,8 +142,8 @@ public class FiducialSimulator implements MouseListener, MouseMotionListener, Ke
 		if (me.getButton()==3) {
 			if (fid!=null) {
 				fid.onTable = !fid.onTable;
-				if (fid.onTable) controller.fiducialAdded(fid.getId(), fid.pos.x, fid.pos.y);
-				else controller.fiducialEnded(fid.getId(), fid.pos.x, fid.pos.y);
+				if (fid.onTable) controller.addTuioObject(createTuioObject(fid.getId(), fid.pos.x, fid.pos.y));
+				else controller.removeTuioObject(createTuioObject(fid.getId(), fid.pos.x, fid.pos.y));
 			}
 		}
 	}
@@ -155,6 +157,10 @@ public class FiducialSimulator implements MouseListener, MouseMotionListener, Ke
 		for (int i=0; i<fiducials.length; i++) {
 			fiducials[i].paint(g);
 		}
+	}
+	
+	private static TuioObject createTuioObject(int id, int x, int y) {
+		return new TuioObject(0, id, (float)x/Settings.WIDTH, (float)y/Settings.HEIGHT, 0);
 	}
 	
 	

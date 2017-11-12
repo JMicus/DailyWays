@@ -2,6 +2,7 @@ package micus.dailyways.view;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +17,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import org.openstreetmap.gui.jmapviewer.*;
@@ -46,6 +48,8 @@ public class MainFrame extends JFrame implements JMapViewerEventListener  {
 
  private JLabel mperpLabelName=null;
  private JLabel mperpLabelValue = null;
+ 
+ private MapOverlay overlay;
 
  /**
   * Constructs the {@code MainFrame}.
@@ -55,6 +59,7 @@ public class MainFrame extends JFrame implements JMapViewerEventListener  {
      setSize(Settings.WIDTH, Settings.HEIGHT+40);
 
      treeMap = new JMapViewerTree("Zones");
+     treeMap.setSize(Settings.WIDTH, Settings.HEIGHT);
 
      // Listen to the map viewer for user operations so components will
      // recieve events and update
@@ -71,6 +76,7 @@ public class MainFrame extends JFrame implements JMapViewerEventListener  {
      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
      //setExtendedState(JFrame.MAXIMIZED_BOTH); // maximize
      
+     JLayeredPane lp = getLayeredPane();
      
      // Menus, button, input, ... /////////////////////////////////
      JPanel panel = new JPanel();
@@ -84,7 +90,10 @@ public class MainFrame extends JFrame implements JMapViewerEventListener  {
      zoomLabel=new JLabel("Zoom: ");
      zoomValue=new JLabel(String.format("%s", map().getZoom()));
 
-     add(panel, BorderLayout.NORTH);
+     //lp.add(panel, Integer.valueOf(1));
+     
+     
+     
      //add(helpPanel, BorderLayout.SOUTH);
      panel.setLayout(new BorderLayout());
      //panel.add(panelTop, BorderLayout.NORTH);
@@ -183,7 +192,13 @@ public class MainFrame extends JFrame implements JMapViewerEventListener  {
      //btTest.addActionListener(controller);
      panelTop.add(btTest);
 
-     add(treeMap, BorderLayout.CENTER);
+     
+     lp.add(treeMap, Integer.valueOf(1));
+     
+     overlay = new MapOverlay(map());
+     overlay.setSize(Settings.WIDTH, Settings.HEIGHT);
+     overlay.setOpaque(false);
+     lp.add(overlay, Integer.valueOf(2));
 
      //
      /*LayerGroup germanyGroup = new LayerGroup("Germany");
@@ -244,26 +259,17 @@ public class MainFrame extends JFrame implements JMapViewerEventListener  {
      });
      
      // daily ways additional settings
-     //System.out.println(showZoomControls.isSelected());
+     map().setZoomContolsVisible(false);
+     
+     //overlay.paint(overlay.getGraphics());
  }
  
  public JMapViewer map(){
-     return treeMap.getViewer();
+     return (JMapViewer) treeMap.getViewer();
  }
  
  private static Coordinate c(double lat, double lon){
      return new Coordinate(lat, lon);
- }
-
- /**
-  * @param args
-  */
- public static void main(String[] args) {
-     // java.util.Properties systemProperties = System.getProperties();
-     // systemProperties.setProperty("http.proxyHost", "localhost");
-     // systemProperties.setProperty("http.proxyPort", "8008");
-	 Settings.load();
-     new MainFrame().setVisible(true);
  }
 
  private void updateZoomParameters() {
@@ -279,6 +285,15 @@ public class MainFrame extends JFrame implements JMapViewerEventListener  {
              command.getCommand().equals(JMVCommandEvent.COMMAND.MOVE)) {
          updateZoomParameters();
      }
+ }
+ 
+ //public Graphics getOverlayGraphics() {return map().getGraphics();}
+ 
+ public MapOverlay getOverlay() {return overlay;}
+ 
+ public void paintOverlay() {
+	 System.out.println("(MainFrame.paintOverlay) ");
+	 overlay.paint(overlay.getGraphics());
  }
 
 public void test() {

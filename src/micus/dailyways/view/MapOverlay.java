@@ -7,29 +7,47 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
 
-import micus.dailyways.helper.Settings;
-import micus.dailyways.main.Model;
+import javax.swing.JPanel;
 
-public class MapOverlay {
+import org.openstreetmap.gui.jmapviewer.JMapViewer;
+
+import micus.dailyways.fiducialSimulator.FiducialSimulator;
+import micus.dailyways.helper.Settings;
+import micus.dailyways.main.Track;
+
+public class MapOverlay extends JPanel{
 	
 	
-	private Model model;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private JMapViewer map;
+	private FiducialSimulator simulator = null;
 	
 	private Point zoomFiducial, panFiducial;
+	private Track track;
 	
 	//private int zoomLevel = 0;
 	
-	public MapOverlay(Model model) {
-		this.model = model;
+	public MapOverlay(JMapViewer map) {
+		super();
+		this.map = map;
 	}
 	
 	
 	
 	public void paint(Graphics g) {
+		//System.out.println("(MapOverlay.paint) size: "+this.getWidth());
 		paintZoomSlider(g);
 		
 		paintFiducial(g, zoomFiducial, Color.YELLOW, "zoom slider");
 		paintFiducial(g, panFiducial, Color.ORANGE, "pan");
+		
+		if (simulator!=null) simulator.paint(g);
+		
+		if (track!=null) track.paint(g, map);
 	}
 	
 	public void paintFiducial(Graphics g, Point p, Color c, String label) {
@@ -81,15 +99,22 @@ public class MapOverlay {
 		g.drawLine(x, margin, x, Settings.HEIGHT-margin);
 		for (int i=Settings.MIN_ZOOM; i<=Settings.MAX_ZOOM; i++) {
 			y = Settings.HEIGHT-margin - (int)((i-Settings.MIN_ZOOM) * levelDistance);
-			if (i==model.getMap().getZoom()) g.setColor(colorA);
-			else g.setColor(colorB);
+			/*if (i==model.getMap().getZoom()) g.setColor(colorA);
+			else*/ g.setColor(colorB);
 			g.drawLine(posX, y, posX+width, y);
 		}
 	}
 	
 	public void setFiducial(int id, Point p) {
+		System.out.println("(MapOverlay.setFiducial) "+id+" "+p);
 		if (id==Settings.ZOOMSLIDER_ID) zoomFiducial = p;
 		else if (id==Settings.PAN_ID) panFiducial = p;
 	}
+	
+	public void setSimulator(FiducialSimulator simulator) {
+		this.simulator = simulator;
+	}
+	
+	public void setTrack(Track track) {this.track = track;}
 
 }

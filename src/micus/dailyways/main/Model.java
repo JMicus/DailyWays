@@ -1,50 +1,49 @@
 package micus.dailyways.main;
 
-import java.awt.Graphics;
 import java.awt.Point;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 
-import micus.dailyways.fiducialSimulator.FiducialSimulator;
 import micus.dailyways.helper.GPXCreator;
 import micus.dailyways.helper.Settings;
 import micus.dailyways.view.MainFrame;
-import micus.dailyways.view.MapOverlay;
 
 public class Model {
 	
-	//private MainFrame frame;
-	private JMapViewer map;
-	private MapOverlay overlay;
+	private MainFrame frame;
+	//private JMapViewer map;
+	//private MapOverlay overlay;
 	private Track track;
 	
-	private FiducialSimulator simulator;
-	
-	public Model(JMapViewer map) {
-		//this.frame = frame;
-		this.map = map;
-		map.setModel(this);
-		overlay = new MapOverlay(this);
+	public Model(MainFrame frame) {
+		this.frame = frame;
+		//this.map = map;
+		//overlay = new MapOverlay();
 		//map.setOverlay(overlay);
 		
 		
-		this.map.setDisplayPosition(new Coordinate(Settings.START_COORD_LAT, Settings.START_COORD_LON), Settings.START_ZOOM);
+		frame.map().setDisplayPosition(new Coordinate(Settings.START_COORD_LAT, Settings.START_COORD_LON), Settings.START_ZOOM);
+		
+		//frame.paintOverlay();
+		
 	}
 	
 	public void addVehicle(Coordinate coord) {
 		if (track==null) {
 			track = new Track(coord);
+			frame.getOverlay().setTrack(track);
 			//map.add
 		}
 		else track.addWayPoint(coord);
-		map.repaint();
+		//map.repaint();
+		paint();
 	}
 	
 	public void updateVehicle(Coordinate coord) {
 		if (track!=null) {
 			track.addWayPoint(coord);
-			map.repaint();
+			paint();
 		}
 		else System.out.println("(Model.updadeVehicle) ERROR: There is no track!");
 	}
@@ -54,23 +53,21 @@ public class Model {
 		GPXCreator.write(track);
 	}
 	
-	public JMapViewer getMap() {
+	/*public JMapViewer getMap() {
 		return map;
-	}
+	}*/
 	
 	public void showFiducial(int id, Point p) {
-		overlay.setFiducial(id, p);
+		frame.getOverlay().setFiducial(id, p);
 	}
 	
-	public void paint(Graphics g) {
+	public void paint() {
 		//map.repaint();
-		overlay.paint(g);
-		if (simulator != null) simulator.paint(g);
-		if (track!=null) track.paint(g, map);
+		frame.getOverlay().repaint();
+		//if (track!=null) track.paint(g, map);
 	}
 	
-	public void setSimulator(FiducialSimulator simulator) {
-		this.simulator = simulator;
-	}
+	public JMapViewer  getMap() {return frame.map();}
+
 
 }
