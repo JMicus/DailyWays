@@ -3,6 +3,7 @@ package micus.dailyways.view;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -56,11 +57,21 @@ public class MainFrame extends JFrame implements JMapViewerEventListener  {
   */
  public MainFrame() {
      super("JMapViewer MainFrame");
-     setSize(Settings.WIDTH, Settings.HEIGHT+40);
-
+     
+     this.setUndecorated(true);
+     
      treeMap = new JMapViewerTree("Zones");
-     treeMap.setSize(Settings.WIDTH, Settings.HEIGHT);
-
+     
+     
+     /*if (Settings.PORTRAIT) {
+    	 setSize(Settings.HEIGHT, Settings.WIDTH);
+     treeMap.setSize(Settings.HEIGHT, Settings.WIDTH);
+     }
+     else {*/
+    	 setSize(Settings.WIDTH, Settings.HEIGHT);
+    	 treeMap.setSize(Settings.WIDTH, Settings.HEIGHT);
+     //}
+     
      // Listen to the map viewer for user operations so components will
      // recieve events and update
      //map().addJMVListener(this);

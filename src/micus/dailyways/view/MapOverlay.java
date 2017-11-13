@@ -99,8 +99,8 @@ public class MapOverlay extends JPanel{
 		g.drawLine(x, margin, x, Settings.HEIGHT-margin);
 		for (int i=Settings.MIN_ZOOM; i<=Settings.MAX_ZOOM; i++) {
 			y = Settings.HEIGHT-margin - (int)((i-Settings.MIN_ZOOM) * levelDistance);
-			/*if (i==model.getMap().getZoom()) g.setColor(colorA);
-			else*/ g.setColor(colorB);
+			if (i==map.getZoom()) g.setColor(colorA);
+			else g.setColor(colorB);
 			g.drawLine(posX, y, posX+width, y);
 		}
 	}

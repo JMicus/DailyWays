@@ -15,7 +15,7 @@ public class Settings {
 	
 	public static double START_COORD_LAT, START_COORD_LON;
 	
-	public static boolean SHOW_FIDUCIALS;
+	public static boolean SHOW_FIDUCIALS, PORTRAIT;
 	
 	public static String GPX_AUTHOR;
 
@@ -62,6 +62,7 @@ public class Settings {
                 CAR_ID = Integer.parseInt(prop.get("car_id").toString());
                 
                 SHOW_FIDUCIALS = Boolean.parseBoolean(prop.get("show_fiducials").toString());
+                PORTRAIT = Boolean.parseBoolean(prop.get("portrait").toString());
                 
                 GPX_AUTHOR = prop.get("gpx_author").toString();
 

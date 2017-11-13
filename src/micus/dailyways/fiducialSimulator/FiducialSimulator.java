@@ -160,7 +160,14 @@ public class FiducialSimulator implements MouseListener, MouseMotionListener, Ke
 	}
 	
 	private static TuioObject createTuioObject(int id, int x, int y) {
-		return new TuioObject(0, id, (float)x/Settings.WIDTH, (float)y/Settings.HEIGHT, 0);
+		float fx = (float)x/Settings.WIDTH;
+		float fy = (float)y/Settings.HEIGHT;
+		if (Settings.PORTRAIT) {
+			float fxTemp = fx;
+			fx = fy;
+			fy = -fxTemp+1;
+		}
+		return new TuioObject(0, id, fx, fy, 0);
 	}
 	
 	

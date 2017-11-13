@@ -132,9 +132,15 @@ public class InputController implements TuioListener {
 	
 	
 	private Point changeInput(float x, float y) {
-		x *= Settings.WIDTH;
-		y *= Settings.HEIGHT;
-		//Point p = new Point((int)-y,(int)-x);
+		if (Settings.PORTRAIT) {
+			float xTemp = x;
+			x = (1-y)*Settings.WIDTH;
+			y = xTemp*Settings.HEIGHT;
+		}
+		else {
+			x *= Settings.WIDTH;
+			y *= Settings.HEIGHT;
+		}
 		Point p = new Point((int)x,(int)y);
 		return p;
 	}
