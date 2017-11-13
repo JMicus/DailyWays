@@ -1,13 +1,17 @@
 package micus.dailyways.helper;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 public class Settings {
 	
-	public static int WIDTH, HEIGHT,
+	public static final String filename = System.getProperty("user.dir")+"/dailyWaysSettings.properties";
+	
+	public static int WIDTH, HEIGHT, POS_X, POS_Y,
 					MAX_ZOOM, MIN_ZOOM, ZOOMSLIDER_MARGIN, ZOOMSLIDER_POSX, ZOOMSLIDER_SIZE,
 					ZOOMSLIDER_ID, PAN_ID, CAR_ID,
 					START_ZOOM,
@@ -18,11 +22,6 @@ public class Settings {
 	public static boolean SHOW_FIDUCIALS, PORTRAIT;
 	
 	public static String GPX_AUTHOR;
-
-	public static void main(String[] args) {
-		load();
-
-	}
 	
 	public static void load() {
 		Properties prop = new Properties();
@@ -30,7 +29,6 @@ public class Settings {
 
     	try {
 
-    		String filename = System.getProperty("user.dir")+"/dailyWaysSettings.properties";
     		//input = Settings.class.getClassLoader().getResourceAsStream(filename);
     		input = new FileInputStream(filename);
     		
@@ -46,6 +44,8 @@ public class Settings {
                 
                 WIDTH = Integer.parseInt(prop.get("width").toString());
                 HEIGHT = Integer.parseInt(prop.get("height").toString());
+                POS_X = Integer.parseInt(prop.get("position_x").toString());
+                POS_Y = Integer.parseInt(prop.get("position_y").toString());
                 MAX_ZOOM = Integer.parseInt(prop.get("max_zoom").toString());
                 MIN_ZOOM = Integer.parseInt(prop.get("min_zoom").toString());
                 ZOOMSLIDER_MARGIN = Integer.parseInt(prop.get("zoomslider_margin").toString());
@@ -77,6 +77,21 @@ public class Settings {
 			}
         	}
         }
+	}
+	
+	public static void savePosition(int x, int y) {
+		Properties prop = new Properties();
+		prop.setProperty("position_x", ""+x);
+		prop.setProperty("position_y", ""+y);
+		try {
+			prop.store(new FileOutputStream(filename+"NEW"), null);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

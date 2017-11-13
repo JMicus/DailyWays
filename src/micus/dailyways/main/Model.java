@@ -7,17 +7,20 @@ import org.openstreetmap.gui.jmapviewer.JMapViewer;
 
 import micus.dailyways.helper.GPXCreator;
 import micus.dailyways.helper.Settings;
+import micus.dailyways.view.ControlView;
 import micus.dailyways.view.MainFrame;
 
 public class Model {
 	
 	private MainFrame frame;
+	private ControlView controlView;
 	//private JMapViewer map;
 	//private MapOverlay overlay;
 	private Track track;
 	
 	public Model(MainFrame frame) {
 		this.frame = frame;
+		controlView = new ControlView(this);
 		//this.map = map;
 		//overlay = new MapOverlay();
 		//map.setOverlay(overlay);
@@ -67,7 +70,8 @@ public class Model {
 		//if (track!=null) track.paint(g, map);
 	}
 	
-	public JMapViewer  getMap() {return frame.map();}
+	public MainFrame getFrame() {return frame;}
+	public JMapViewer getMap() {return frame.map();}
 
 
 }
