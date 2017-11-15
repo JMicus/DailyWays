@@ -1,6 +1,7 @@
 package micus.dailyways.view;
 
 import java.awt.Point;
+import java.util.Date;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
@@ -22,8 +23,10 @@ public class InputController implements TuioListener {
 	//private MapOverlay overlay;
 	private Model model;
 	
+	// pan
 	private Coordinate panCoord;
 	private Point panMapPoint;
+	private long lastPanUpdate;
 	
 	public InputController(Model model/*, JMapViewer map, MapOverlay overlay*/) {
 		//this.frame = frame;
@@ -45,7 +48,9 @@ public class InputController implements TuioListener {
 		System.out.println("added: "+fID+" at "+x+":"+y);
 		
 		//Point mapPoint = new Point((int)x,(int)y);
-		Point mapPoint = changeInput(x,y);
+		/*Point mapPoint = changeInput(x,y);
+		
+		//if (mapPoint!=null) updateTuioObject(to);
 		
 		model.showFiducial(fID, mapPoint);
 		
@@ -62,7 +67,7 @@ public class InputController implements TuioListener {
 			model.addVehicle(model.getMap().getPosition(mapPoint));
 		}
 		
-		repaint();
+		repaint();*/
 	}
 	
 	@Override
@@ -86,7 +91,15 @@ public class InputController implements TuioListener {
 		}
 		else if (fID == Settings.PAN_ID) {
 			panMapPoint = mapPoint;
-			model.getMap().setDisplayPosition(panMapPoint, panCoord, model.getMap().getZoom());
+			long now = new Date().getTime();
+			double distance = Double.MAX_VALUE;
+			if (panCoord!=null) distance = mapPoint.distance(model.getMap().getMapPosition(panCoord));
+			System.out.println("(InputController.updateTuioObject) pan last update: "+(now-lastPanUpdate)+", distance: "+distance);
+			if (now-lastPanUpdate>4000 || distance>200) {
+				panCoord = model.getMap().getPosition(mapPoint);
+				lastPanUpdate = now;
+			}
+			else model.getMap().setDisplayPosition(panMapPoint, panCoord, model.getMap().getZoom());
 		}
 		else if (fID == Settings.CAR_ID) {
 			model.updateVehicle(model.getMap().getPosition(mapPoint));
@@ -106,7 +119,10 @@ public class InputController implements TuioListener {
 		
 		Point mapPoint = changeInput(x,y);
 		
-		if (fID == Settings.PAN_ID) panMapPoint = null;
+		if (fID == Settings.PAN_ID) {
+			//panMapPoint = null;
+			//panCoord = null;
+		}
 		else if (fID == Settings.CAR_ID) {
 			model.endVehicle(model.getMap().getPosition(mapPoint));
 		}

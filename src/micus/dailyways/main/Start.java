@@ -25,13 +25,12 @@ public class Start {
 		
 		InputController controller = new InputController(model);
 		
-		FiducialSimulator simulator = new FiducialSimulator(controller);
+		/*FiducialSimulator simulator = new FiducialSimulator(controller);
 		frame.map().addMouseListener(simulator);
 		frame.map().addMouseMotionListener(simulator);
 		frame.addKeyListener(simulator);
 		
-		//model.setSimulator(simulator);
-		frame.getOverlay().setSimulator(simulator);
+		frame.getOverlay().setSimulator(simulator);*/
 		
 		
 		

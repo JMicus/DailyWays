@@ -32,7 +32,7 @@ public class Model {
 		
 	}
 	
-	public void addVehicle(Coordinate coord) {
+	/*public void addVehicle(Coordinate coord) {
 		if (track==null) {
 			track = new Track(coord);
 			frame.getOverlay().setTrack(track);
@@ -41,14 +41,17 @@ public class Model {
 		else track.addWayPoint(coord);
 		//map.repaint();
 		paint();
-	}
+	}*/
 	
 	public void updateVehicle(Coordinate coord) {
-		if (track!=null) {
+		if (track==null) {
+			track = new Track(coord);
+			frame.getOverlay().setTrack(track);
+		}
+		else {
 			track.addWayPoint(coord);
 			paint();
 		}
-		else System.out.println("(Model.updadeVehicle) ERROR: There is no track!");
 	}
 	
 	public void endVehicle(Coordinate coord) {

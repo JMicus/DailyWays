@@ -56,6 +56,7 @@ public class ControlView extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
 		this.setLocationRelativeTo(null);
+		this.setState(JFrame.ICONIFIED);
 		this.setVisible(true);
 	}
 	

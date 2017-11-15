@@ -40,27 +40,31 @@ public class MapOverlay extends JPanel{
 	
 	public void paint(Graphics g) {
 		//System.out.println("(MapOverlay.paint) size: "+this.getWidth());
-		paintZoomSlider(g);
+		Graphics2D g2d = (Graphics2D)g;
 		
-		paintFiducial(g, zoomFiducial, Color.YELLOW, "zoom slider");
-		paintFiducial(g, panFiducial, Color.ORANGE, "pan");
+		paintZoomSlider(g2d);
+		
+		paintFiducial(g2d, zoomFiducial, Color.YELLOW, "zoom slider");
+		paintFiducial(g2d, panFiducial, Color.ORANGE, "pan");
 		
 		if (simulator!=null) simulator.paint(g);
 		
 		if (track!=null) track.paint(g, map);
 	}
 	
-	public void paintFiducial(Graphics g, Point p, Color c, String label) {
+	public void paintFiducial(Graphics2D g, Point p, Color c, String label) {
 		if (Settings.SHOW_FIDUCIALS && p!=null) {
+			g.setStroke(new BasicStroke(10, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g.setColor(c);
-			int rad = 20;
-			g.fillOval(p.x-rad, p.y-rad, 2*rad+1, 2*rad+1);
+			int rad = 50;
+			g.drawOval(p.x-rad, p.y-rad, 2*rad+1, 2*rad+1);
 			g.setColor(Color.black);
-			g.drawString(label, p.x, p.y);
+			g.drawString(label, p.x, p.y-rad);
 		}
 	}
 	
-	public void paintZoomSlider(Graphics graphics) {
+	public void paintZoomSlider(Graphics2D g) {
 		int symbolDistance = 20;
 		
 		int maxThickness = 9; // odd value
@@ -74,8 +78,6 @@ public class MapOverlay extends JPanel{
 		if (width % 2 != 0) width += 1; // odd value
 		int symbolPadding = (int)(width*0.75f); // < width / 2
 		
-		
-		Graphics2D g = (Graphics2D)graphics;
 		g.setStroke(new BasicStroke(width/5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
@@ -106,7 +108,7 @@ public class MapOverlay extends JPanel{
 	}
 	
 	public void setFiducial(int id, Point p) {
-		System.out.println("(MapOverlay.setFiducial) "+id+" "+p);
+		//System.out.println("(MapOverlay.setFiducial) "+id+" "+p);
 		if (id==Settings.ZOOMSLIDER_ID) zoomFiducial = p;
 		else if (id==Settings.PAN_ID) panFiducial = p;
 	}
