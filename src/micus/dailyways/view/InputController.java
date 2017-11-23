@@ -45,7 +45,7 @@ public class InputController implements TuioListener {
 		int fID = to.getSymbolID();
 		float x = to.getX();
 		float y = to.getY();
-		System.out.println("added: "+fID+" at "+x+":"+y);
+		System.out.println(new Date().getTime()+" added: "+fID+" at "+x+":"+y);
 		
 		//Point mapPoint = new Point((int)x,(int)y);
 		/*Point mapPoint = changeInput(x,y);
@@ -75,7 +75,7 @@ public class InputController implements TuioListener {
 		int fID = to.getSymbolID();
 		float x = to.getX();
 		float y = to.getY();
-		System.out.println("updated: "+fID+" at "+x+":"+y);
+		System.out.println(new Date().getTime()+" updated: "+fID+" at "+x+":"+y);
 		
 		//Point mapPoint = new Point((int)x,(int)y);
 		Point mapPoint = changeInput(x,y);
@@ -94,7 +94,7 @@ public class InputController implements TuioListener {
 			long now = new Date().getTime();
 			double distance = Double.MAX_VALUE;
 			if (panCoord!=null) distance = mapPoint.distance(model.getMap().getMapPosition(panCoord));
-			System.out.println("(InputController.updateTuioObject) pan last update: "+(now-lastPanUpdate)+", distance: "+distance);
+			//System.out.println("(InputController.updateTuioObject) pan last update: "+(now-lastPanUpdate)+", distance: "+distance);
 			if (now-lastPanUpdate>4000 || distance>200) {
 				panCoord = model.getMap().getPosition(mapPoint);
 				lastPanUpdate = now;
@@ -113,7 +113,7 @@ public class InputController implements TuioListener {
 		int fID = to.getSymbolID();
 		float x = to.getX();
 		float y = to.getY();
-		System.out.println("ended: "+fID+" at "+x+":"+y);
+		System.out.println(new Date().getTime()+" removed: "+fID+" at "+x+":"+y);
 		
 		model.showFiducial(fID, null);
 		

@@ -83,7 +83,7 @@ public class GPXCreator {
 
 		transformer.transform(source, result);
 
-		System.out.println("File saved!\n"+filename);
+		//System.out.println("File saved!\n"+filename);
 
 	  } catch (ParserConfigurationException pce) {
 		pce.printStackTrace();
