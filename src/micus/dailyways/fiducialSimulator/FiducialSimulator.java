@@ -8,16 +8,21 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.Date;
 
 import TUIO.TuioObject;
 import micus.dailyways.helper.Settings;
-import micus.dailyways.view.InputController;
+import micus.dailyways.io.InputController;
 
 public class FiducialSimulator implements MouseListener, MouseMotionListener, KeyListener {
 	
 	private static final int fiducialSize = 25;
 	
 	private InputController controller;
+	
+	private long lastInput = 0;
+	
+	private final static long inputInterval = 100;
 	
 	private class Fiducial {
 		
@@ -98,7 +103,11 @@ public class FiducialSimulator implements MouseListener, MouseMotionListener, Ke
 		if (fid!=null) {
 			fid.pos = me.getPoint();
 			//System.out.println("(FiducialSimulator.mouseMoved) "+fid.getId()+fid.pos.x+fid.pos.y);
-			if (fid.onTable) controller.updateTuioObject(createTuioObject(fid.getId(), fid.pos.x, fid.pos.y));
+			long now = new Date().getTime();
+			if (fid.onTable && now-lastInput >= inputInterval) {
+				controller.updateTuioObject(createTuioObject(fid.getId(), fid.pos.x, fid.pos.y));
+				lastInput = now;
+			}
 			else controller.repaint(); // repaint
 		}
 	}
@@ -159,7 +168,7 @@ public class FiducialSimulator implements MouseListener, MouseMotionListener, Ke
 		}
 	}
 	
-	private static TuioObject createTuioObject(int id, int x, int y) {
+	public static TuioObject createTuioObject(int id, int x, int y) {
 		float fx = (float)x/Settings.WIDTH;
 		float fy = (float)y/Settings.HEIGHT;
 		if (Settings.PORTRAIT) {

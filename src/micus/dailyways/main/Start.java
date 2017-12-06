@@ -2,8 +2,8 @@ package micus.dailyways.main;
 
 import micus.dailyways.fiducialSimulator.FiducialSimulator;
 import micus.dailyways.helper.Settings;
-import micus.dailyways.view.InputController;
-import micus.dailyways.view.MainFrame;
+import micus.dailyways.io.InputController;
+import micus.dailyways.io.MainFrame;
 
 public class Start {
 	private static final long serialVersionUID = 1L;
@@ -25,12 +25,12 @@ public class Start {
 		
 		InputController controller = new InputController(model);
 		
-		/*FiducialSimulator simulator = new FiducialSimulator(controller);
+		FiducialSimulator simulator = new FiducialSimulator(controller);
 		frame.map().addMouseListener(simulator);
 		frame.map().addMouseMotionListener(simulator);
 		frame.addKeyListener(simulator);
 		
-		frame.getOverlay().setSimulator(simulator);*/
+		frame.getOverlay().setSimulator(simulator);
 		
 		
 		

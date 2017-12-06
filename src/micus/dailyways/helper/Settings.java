@@ -16,6 +16,7 @@ public class Settings {
 					ZOOMSLIDER_ID, PAN_ID, CAR_ID,
 					START_ZOOM,
 					PORT;
+	public static int SMOOTH_PAN_ID = -1;
 	
 	public static double START_COORD_LAT, START_COORD_LON;
 	

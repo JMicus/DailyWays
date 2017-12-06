@@ -7,8 +7,8 @@ import org.openstreetmap.gui.jmapviewer.JMapViewer;
 
 import micus.dailyways.helper.GPXCreator;
 import micus.dailyways.helper.Settings;
-import micus.dailyways.view.ControlView;
-import micus.dailyways.view.MainFrame;
+import micus.dailyways.io.ControlView;
+import micus.dailyways.io.MainFrame;
 
 public class Model {
 	
